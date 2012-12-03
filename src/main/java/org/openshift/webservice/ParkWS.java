@@ -11,6 +11,7 @@ import javax.ws.rs.Produces;
 
 import org.openshift.data.DBConnection;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -33,7 +34,7 @@ public class ParkWS {
 		DBCursor cursor = parkListCollection.find();
 		try {
 			while(cursor.hasNext()) {
-				allParksList.add(cursor.next());
+				allParksList.add((BasicDBObject)cursor.next());
             }
         } finally {
             cursor.close();
