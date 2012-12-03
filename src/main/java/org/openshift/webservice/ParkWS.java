@@ -48,6 +48,7 @@ public class ParkWS {
 	@Path("/test")
 	@Produces("text/plain")
 	public String sayHello() {
+		System.out.println("Where is this getting written");
 	    return "Hello World In Both Places";
 	}
 

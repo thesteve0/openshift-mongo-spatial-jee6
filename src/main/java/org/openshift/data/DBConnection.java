@@ -19,6 +19,7 @@ public class DBConnection {
 
     public DBConnection() {
 		super();
+		System.out.println("Why am I getting no output");
 
 	}
     
