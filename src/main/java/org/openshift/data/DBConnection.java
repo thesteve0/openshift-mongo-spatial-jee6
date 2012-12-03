@@ -26,14 +26,14 @@ public class DBConnection {
 	public void afterCreate() {
 		System.out.println("just see if we can say anything");
 		
-		String host = System.getenv("OPENSHIFT_NOSQL_DB_HOST");
+		String host = System.getenv("OPENSHIFT_MONGODB_DB_HOST");
 		
 		if (host == null || "".equals(host)){
 			//we are not on openshift
 			Mongo mongo = null;
 			try {
 				mongo = new Mongo( "localhost" , 27017 );
-				mongoDB = mongo.getDB("mailreflector");
+				mongoDB = mongo.getDB("javaws");
 			} catch (UnknownHostException e) {
 				System.out.println("Could not connect to Mongo on Localhost: " + e.getMessage());
 			}
@@ -42,9 +42,9 @@ public class DBConnection {
 		} else {
 			
 			//on openshift
-			String mongoport = System.getenv("OPENSHIFT_NOSQL_DB_PORT");
-		    String user = System.getenv("OPENSHIFT_NOSQL_DB_USERNAME");
-		    String password = System.getenv("OPENSHIFT_NOSQL_DB_PASSWORD");
+			String mongoport = System.getenv("OPENSHIFT_MONGODB_DB_PORT");
+		    String user = System.getenv("OPENSHIFT_MONGODB_DB_USERNAME");
+		    String password = System.getenv("OPENSHIFT_MONGODB_DB_PASSWORD");
 		    String db = System.getenv("OPENSHIFT_APP_NAME");
 		    int port = Integer.decode(mongoport);
 			
