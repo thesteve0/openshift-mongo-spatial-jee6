@@ -122,12 +122,12 @@ public class ParkWS {
 		Pattern namePattern = Pattern.compile(name, Pattern.CASE_INSENSITIVE);
 		wholeQuery.put("name", namePattern);
 		
-		//then the spatial
+		/*then the spatial
 		ArrayList posList = new ArrayList();
 		posList.add(new Float(lon));
 		posList.add(new Float(lat));
 		wholeQuery.put("pos", new BasicDBObject("$near", posList));
-		
+		*/
 		
 		System.out.println("whole query: " + wholeQuery.toString());
 		
