@@ -39,18 +39,21 @@ public class ParkWS {
 	@GET()
 	@Produces("application/json")
 	public List getAllParks(){
-		ArrayList<Map> allParksList = new ArrayList<Map>();
+		ArrayList allParksList = new ArrayList();
 		DB db = dbConnection.getDB();
 		DBCollection parkListCollection = db.getCollection("parkpoints");
 		DBCursor cursor = parkListCollection.find();
 		try {
 			while(cursor.hasNext()) {
+				allParksList.add(cursor.next().toString().getBytes());
+				/*
 				DBObject dataValue = cursor.next();
 				HashMap holder = new HashMap<String, Object>();
 				holder.put("name",dataValue.get("Name"));
 				holder.put("position", dataValue.get("pos"));
 				holder.put("id", dataValue.get("_id").toString());
 				allParksList.add(holder);
+				*/
             }
         } finally {
             cursor.close();
