@@ -120,14 +120,14 @@ public class ParkWS {
 		BasicDBObject wholeQuery = new BasicDBObject();
 		//first the regex
 		Pattern namePattern = Pattern.compile(name, Pattern.CASE_INSENSITIVE);
-		wholeQuery.put("name", namePattern);
+		wholeQuery.put("Name", namePattern);
 		
-		/*then the spatial
+		/*then the spatial */
 		ArrayList posList = new ArrayList();
 		posList.add(new Float(lon));
 		posList.add(new Float(lat));
 		wholeQuery.put("pos", new BasicDBObject("$near", posList));
-		*/
+		
 		
 		System.out.println("whole query: " + wholeQuery.toString());
 		
