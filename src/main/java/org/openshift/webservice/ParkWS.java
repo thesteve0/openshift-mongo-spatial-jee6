@@ -11,6 +11,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
 import org.bson.types.ObjectId;
 import org.openshift.data.DBConnection;
@@ -58,7 +59,6 @@ public class ParkWS {
 	@Path("park/{id}")
 	public HashMap getAPark(@PathParam("id") String id){
 		
-		
 		DB db = dbConnection.getDB();
 		DBCollection parkListCollection = db.getCollection("parkpoints");
 		
@@ -68,6 +68,40 @@ public class ParkWS {
 		holder.put("position", park.get("pos"));
 		holder.put("id", park.get("_id").toString());
 		return holder;
+	}
+	
+	@GET
+	@Produces("application/json")
+	@Path("near")
+	public List findParksNear(@QueryParam("lat") float lat, @QueryParam("lon") float lon){
+		ArrayList<Map> allParksList = new ArrayList<Map>();
+		DB db = dbConnection.getDB();
+		DBCollection parkListCollection = db.getCollection("parkpoints");
+		
+		//make the query object
+		BasicDBObject spatialQuery = new BasicDBObject();
+		ArrayList posList = new ArrayList();
+		posList.add(new Float(lon));
+		posList.add(new Float(lat));
+		spatialQuery.put("pos", new BasicDBObject("near", posList));
+		
+		
+		DBCursor cursor = parkListCollection.find(spatialQuery);
+		try {
+			while(cursor.hasNext()) {
+				DBObject dataValue = cursor.next();
+				HashMap holder = new HashMap<String, Object>();
+				holder.put("name",dataValue.get("Name"));
+				holder.put("position", dataValue.get("pos"));
+				holder.put("id", dataValue.get("_id").toString());
+				allParksList.add(holder);
+            }
+        } finally {
+            cursor.close();
+        }
+
+		return allParksList;
+		
 	}
 	
 	
