@@ -1,6 +1,7 @@
 package org.openshift.webservice;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +37,12 @@ public class ParkWS {
 		DBCursor cursor = parkListCollection.find();
 		try {
 			while(cursor.hasNext()) {
-				allParksList.add(cursor.next().toMap());
+				DBObject dataValue = cursor.next();
+				HashMap holder = new HashMap<String, Object>();
+				holder.put("name",dataValue.get("Name"));
+				holder.put("position", dataValue.get("pos"));
+				holder.put("id", dataValue.get("_id").toString());
+				allParksList.add(holder);
             }
         } finally {
             cursor.close();
