@@ -10,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 import org.openshift.data.DBConnection;
+import org.openshift.data.Park;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -28,13 +29,13 @@ public class ParkWS {
 	@GET()
 	@Produces("application/json")
 	public List getAllParks(){
-		ArrayList<DBObject> allParksList = new ArrayList<DBObject>();
+		ArrayList<Park> allParksList = new ArrayList<Park>();
 		DB db = dbConnection.getDB();
 		DBCollection parkListCollection = db.getCollection("parkpoints");
 		DBCursor cursor = parkListCollection.find();
 		try {
 			while(cursor.hasNext()) {
-				allParksList.add((BasicDBObject)cursor.next());
+				allParksList.add((Park)cursor.next());
             }
         } finally {
             cursor.close();
