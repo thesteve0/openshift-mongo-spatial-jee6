@@ -8,7 +8,9 @@ import java.util.regex.Pattern;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -23,6 +25,7 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.mongodb.WriteConcern;
 
 
 @RequestScoped
@@ -32,6 +35,7 @@ public class ParkWS {
 	@Inject 
 	private DBConnection dbConnection;
 	
+	//get all the parks
 	@GET()
 	@Produces("application/json")
 	public List getAllParks(){
@@ -54,7 +58,10 @@ public class ParkWS {
 
 		return allParksList;
 	}
-
+	
+	
+	
+	//////////get a park given the id
 	@GET()
 	@Produces("application/json")
 	@Path("park/{id}")
@@ -71,6 +78,9 @@ public class ParkWS {
 		return holder;
 	}
 	
+	
+	
+	///////////get parks near a coord  ?lat=37.5&lon=-83.0
 	@GET
 	@Produces("application/json")
 	@Path("near")
@@ -108,6 +118,7 @@ public class ParkWS {
 	}
 	
 	
+	////////get parks near a coord with a certain name
 	@GET
 	@Produces("application/json")
 	@Path("name/near/{name}")
@@ -147,6 +158,33 @@ public class ParkWS {
         }
 
 		return allParksList;
+		
+	}
+	
+	
+	///////still need the insert
+	@POST
+	@Path("park")
+	@Consumes("application/json")
+	@Produces("application/json")
+	public HashMap insertAPark(Park park){
+		BasicDBObject parkObject = new BasicDBObject("Name",park.getName());
+		parkObject.append("pos", park.getPos());
+		
+		DB db = dbConnection.getDB();
+		DBCollection parkListCollection = db.getCollection("parkpoints");
+		try{
+			parkListCollection.insert(parkObject, WriteConcern.SAFE);
+		} catch (Exception e) {
+			System.out.println("threw an exception: " + e.getClass() + " :: " + e.getMessage());
+		}
+		
+		//now make it look pretty
+		HashMap holder = new HashMap<String, Object>();
+		holder.put("name",parkObject.get("Name"));
+		holder.put("position", parkObject.get("pos"));
+		holder.put("id", parkObject.get("_id").toString());
+		return holder;
 		
 	}
 	
