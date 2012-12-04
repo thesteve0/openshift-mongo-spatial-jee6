@@ -9,8 +9,10 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.bson.types.ObjectId;
 import org.openshift.data.DBConnection;
 import org.openshift.data.Park;
 
@@ -49,6 +51,19 @@ public class ParkWS {
         }
 
 		return allParksList;
+	}
+
+	@GET()
+	@Produces("application/json")
+	@Path("park/{id}")
+	public DBObject getAPark(@PathParam("id") String id){
+		//ObjectId parkID = new ObjectId(id);
+		
+		DB db = dbConnection.getDB();
+		DBCollection parkListCollection = db.getCollection("parkpoints");
+		
+		DBObject park = parkListCollection.findOne(new BasicDBObject().append("_id",  new ObjectId(id)));
+		return park;
 	}
 	
 	
