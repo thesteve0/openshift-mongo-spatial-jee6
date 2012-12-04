@@ -2,6 +2,7 @@ package org.openshift.webservice;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -29,13 +30,13 @@ public class ParkWS {
 	@GET()
 	@Produces("application/json")
 	public List getAllParks(){
-		ArrayList<String> allParksList = new ArrayList<String>();
+		ArrayList<Map> allParksList = new ArrayList<Map>();
 		DB db = dbConnection.getDB();
 		DBCollection parkListCollection = db.getCollection("parkpoints");
 		DBCursor cursor = parkListCollection.find();
 		try {
 			while(cursor.hasNext()) {
-				allParksList.add(cursor.next().toString());
+				allParksList.add(cursor.next().toMap());
             }
         } finally {
             cursor.close();
