@@ -56,14 +56,18 @@ public class ParkWS {
 	@GET()
 	@Produces("application/json")
 	@Path("park/{id}")
-	public DBObject getAPark(@PathParam("id") String id){
-		//ObjectId parkID = new ObjectId(id);
+	public HashMap getAPark(@PathParam("id") String id){
+		
 		
 		DB db = dbConnection.getDB();
 		DBCollection parkListCollection = db.getCollection("parkpoints");
 		
 		DBObject park = parkListCollection.findOne(new BasicDBObject().append("_id",  new ObjectId(id)));
-		return park;
+		HashMap holder = new HashMap<String, Object>();
+		holder.put("name",park.get("Name"));
+		holder.put("position", park.get("pos"));
+		holder.put("id", park.get("_id").toString());
+		return holder;
 	}
 	
 	
