@@ -85,6 +85,8 @@ public class ParkWS {
 		posList.add(new Float(lat));
 		spatialQuery.put("pos", new BasicDBObject("near", posList));
 		
+		System.out.println("spatial query: " + spatialQuery.toString());
+		
 		
 		DBCursor cursor = parkListCollection.find(spatialQuery);
 		try {
