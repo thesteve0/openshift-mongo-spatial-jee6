@@ -29,13 +29,13 @@ public class ParkWS {
 	@GET()
 	@Produces("application/json")
 	public List getAllParks(){
-		ArrayList<Park> allParksList = new ArrayList<Park>();
+		ArrayList<String> allParksList = new ArrayList<String>();
 		DB db = dbConnection.getDB();
 		DBCollection parkListCollection = db.getCollection("parkpoints");
 		DBCursor cursor = parkListCollection.find();
 		try {
 			while(cursor.hasNext()) {
-				allParksList.add((Park)cursor.next());
+				allParksList.add(cursor.next().toString());
             }
         } finally {
             cursor.close();
