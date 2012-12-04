@@ -83,7 +83,7 @@ public class ParkWS {
 		ArrayList posList = new ArrayList();
 		posList.add(new Float(lon));
 		posList.add(new Float(lat));
-		spatialQuery.put("pos", new BasicDBObject("near", posList));
+		spatialQuery.put("pos", new BasicDBObject("$near", posList));
 		
 		System.out.println("spatial query: " + spatialQuery.toString());
 		
