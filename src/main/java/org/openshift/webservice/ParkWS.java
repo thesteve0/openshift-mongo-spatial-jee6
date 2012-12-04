@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -89,6 +90,49 @@ public class ParkWS {
 		
 		
 		DBCursor cursor = parkListCollection.find(spatialQuery);
+		try {
+			while(cursor.hasNext()) {
+				DBObject dataValue = cursor.next();
+				HashMap holder = new HashMap<String, Object>();
+				holder.put("name",dataValue.get("Name"));
+				holder.put("position", dataValue.get("pos"));
+				holder.put("id", dataValue.get("_id").toString());
+				allParksList.add(holder);
+            }
+        } finally {
+            cursor.close();
+        }
+
+		return allParksList;
+		
+	}
+	
+	
+	@GET
+	@Produces("application/json")
+	@Path("name/near/{name}")
+	public List findParksNearName(@PathParam("name") String name, @QueryParam("lat") float lat, @QueryParam("lon") float lon){
+		ArrayList<Map> allParksList = new ArrayList<Map>();
+		DB db = dbConnection.getDB();
+		DBCollection parkListCollection = db.getCollection("parkpoints");
+		
+		//make the query object
+		BasicDBObject wholeQuery = new BasicDBObject();
+		//first the regex
+		Pattern namePattern = Pattern.compile(name, Pattern.CASE_INSENSITIVE);
+		wholeQuery.put("name", namePattern);
+		
+		//then the spatial
+		ArrayList posList = new ArrayList();
+		posList.add(new Float(lon));
+		posList.add(new Float(lat));
+		wholeQuery.put("pos", new BasicDBObject("$near", posList));
+		
+		
+		System.out.println("whole query: " + wholeQuery.toString());
+		
+		
+		DBCursor cursor = parkListCollection.find(wholeQuery);
 		try {
 			while(cursor.hasNext()) {
 				DBObject dataValue = cursor.next();
