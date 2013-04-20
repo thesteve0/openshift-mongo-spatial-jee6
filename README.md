@@ -17,7 +17,7 @@ Add this upstream flask repo
 
 
     cd javaws
-    git remote add upstream -m master ??????????
+    git remote add upstream -m master https://github.com/thesteve0/openshift-mongo-spatial-jee6.git
     git pull -s recursive -X theirs upstream master
     
 Then push the repo upstream
